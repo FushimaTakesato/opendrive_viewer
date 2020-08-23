@@ -26,23 +26,31 @@ class Line:
         self.bV = bV
         self.cV = cV
         self.dV = dV
-        
+
+class LinkElement:
+    def __init__(self):
+        self.elementType=""
+        self.elementId=-1
+
+class Link:
+    def __init__(self):
+        self.predecessor = LinkElement()
+        self.successor = LinkElement()
+    def setLinkElement(self, link, elementType, elementId):
+        link.elementType = elementType
+        link.elementId = elementId
+    
 class Road:
     def __init__(self, name="", id="", junction = -1):
         self.name = name
         self.id = id
         self.junction = junction
         self.line = []
-        self.pre = -1
-        self.suc = -1
+        self.link = Link()
     def setRoad(self, name, id, junction):
         self.name = name
         self.id = id
         self.junction = junction
-    def setPredecessor(self, pre):
-        self.pre = pre
-    def setSuccessor(self, suc):
-        self.suc = suc
     
 
 def rotation(x, t, x0 = np.array([0,0]), deg = False):
@@ -134,9 +142,9 @@ def pickupRoadGeometry(child, road):
             if(child2.tag == "link"):
                 for child3 in child2:
                     if(child3.tag == "predecessor"):
-                        road_.setPredecessor(int(child3.get('elementId')))
+                        road_.link.setLinkElement(road_.link.predecessor, child3.get('elementType'), int(child3.get('elementId')))
                     if(child3.tag == "successor"):
-                        road_.setSuccessor(int(child3.get('elementId')))
+                        road_.link.setLinkElement(road_.link.successor, child3.get('elementType'), int(child3.get('elementId')))
             if(child2.tag == "planView"):
                 for child3 in child2:
                     if(child3.tag == "geometry"):
