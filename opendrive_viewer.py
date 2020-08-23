@@ -8,7 +8,7 @@ import math
 import sys
 import os
 
-class Line:
+class planView:
     def __init__(self):
         pass
     def setGeometry(self, s, x, y, hdg, length):
@@ -45,7 +45,7 @@ class Road:
         self.name = name
         self.id = id
         self.junction = junction
-        self.line = []
+        self.planView = []
         self.link = Link()
     def setRoad(self, name, id, junction):
         self.name = name
@@ -148,13 +148,13 @@ def pickupRoadGeometry(child, road):
             if(child2.tag == "planView"):
                 for child3 in child2:
                     if(child3.tag == "geometry"):
-                        line_ = Line()
+                        planView_ = planView()
                         s = float(child3.get('s'))
                         x = float(child3.get('x'))
                         y = float(child3.get('y'))
                         hdg = float(child3.get('hdg'))
                         length = float(child3.get('length'))
-                        line_.setGeometry(s, x, y, hdg, length)
+                        planView_.setGeometry(s, x, y, hdg, length)
                         for child4 in child3:
                             if(child4.tag == "line"):
                                 aU = 0.0
@@ -165,7 +165,7 @@ def pickupRoadGeometry(child, road):
                                 bV = 0.0
                                 cV = 0.0
                                 dV = 0.0
-                                line_.setParamPoly3(aU, bU, cU, dU, aV, bV, cV, dV)
+                                planView_.setParamPoly3(aU, bU, cU, dU, aV, bV, cV, dV)
                                 
                             if(child4.tag == "paramPoly3"):
                                 aU = float(child4.get('aU'))
@@ -176,7 +176,7 @@ def pickupRoadGeometry(child, road):
                                 bV = float(child4.get('bV'))
                                 cV = float(child4.get('cV'))
                                 dV = float(child4.get('dV'))
-                                line_.setParamPoly3(aU, bU, cU, dU, aV, bV, cV, dV)
+                                planView_.setParamPoly3(aU, bU, cU, dU, aV, bV, cV, dV)
                             if(child4.tag == "poly3"):
                                 #TODO
                                 print("Poly3 is not yet defined.")
@@ -186,7 +186,7 @@ def pickupRoadGeometry(child, road):
                             if(child4.tag == "arc"):
                                 #TODO
                                 print("Arc is not yet defined.")
-                        road_.line.append(line_)
+                        road_.planView.append(planView_)
         road.append(road_)
 
 def main(filename):
@@ -206,19 +206,19 @@ def main(filename):
     Y_all = []
     label_all = []
     for i in range(len(road)):
-        for j in range(len(road[i].line)):
-            x = road[i].line[j].x
-            y = road[i].line[j].y
-            hdg = road[i].line[j].hdg
-            length = road[i].line[j].length
-            aU = road[i].line[j].aU
-            bU = road[i].line[j].bU
-            cU = road[i].line[j].cU
-            dU = road[i].line[j].dU
-            aV = road[i].line[j].aV
-            bV = road[i].line[j].bV
-            cV = road[i].line[j].cV
-            dV = road[i].line[j].dV
+        for j in range(len(road[i].planView)):
+            x = road[i].planView[j].x
+            y = road[i].planView[j].y
+            hdg = road[i].planView[j].hdg
+            length = road[i].planView[j].length
+            aU = road[i].planView[j].aU
+            bU = road[i].planView[j].bU
+            cU = road[i].planView[j].cU
+            dU = road[i].planView[j].dU
+            aV = road[i].planView[j].aV
+            bV = road[i].planView[j].bV
+            cV = road[i].planView[j].cV
+            dV = road[i].planView[j].dV
             U, V = drawUV(aU, bU, cU, dU, aV, bV, cV, dV, length)
             X, Y = convertUVtoXY(U, V, x, y, hdg)
             # display points
